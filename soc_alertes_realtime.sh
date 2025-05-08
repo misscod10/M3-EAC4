@@ -2,22 +2,21 @@
 tail -Fn0 /var/log/audit/audit.log | \
 while read line; do
 
-  # ALERTA 1 – docker sospitós (amb muntatge de /)
-  if echo "$line" | grep -q "key=docker-sospitos"; then
-    if echo "$line" | grep -q "/:/mnt"; then
-      echo "[ALERTA SOC] Docker amb muntatge de / detectat! $(date)" >> /var/log/alertes_soc.log
-    fi
+  # ALERTA: Execució de runc com root però des d’un usuari no root
+  if echo "$line" | grep -q "exe=\"/usr/bin/runc\"" && echo "$line" | grep -q "uid=0" && echo "$line" | grep -qv "auid=0"; then
+    echo "[ALERTA SOC] Execució de contenidor amb escalada detectada! UID=0 però AUID≠0 – $(date)" >> /home/alumn/alertes_soc.log
   fi
 
-  # ALERTA 2 – execució de shell (sh) des de context inesperat
+  # ALERTA 2: Execució de shell des de nano
   if echo "$line" | grep -q "key=shell-inesperada"; then
     parent_pid=$(echo "$line" | grep -oP 'ppid=\K[0-9]+')
     if [ -n "$parent_pid" ]; then
       parent_name=$(ps -p "$parent_pid" -o comm=)
       if echo "$parent_name" | grep -q "nano"; then
-        echo "[ALERTA SOC] Execució de shell des de nano detectada! $(date)" >> /var/log/alertes_soc.log
+        echo "[ALERTA SOC] Execució de shell des de nano detectada! $(date)" >> /home/alumn/alertes_soc.log
       fi
     fi
   fi
 
 done
+
