@@ -1,0 +1,5 @@
+-a always,exit -F arch=b64 -F exe=/bin/bash -F key=shell-inesperada
+-a always,exit -F arch=b64 -F exe=/bin/dash -F key=shell-inesperada
+-a always,exit -F arch=b64 -F exe=/usr/bin/bash -F key=shell-inesperada
+-a always,exit -F arch=b64 -F exe=/usr/bin/sh -F key=shell-inesperada
+-a always,exit -F arch=b64 -F path=/usr/bin/docker -F perm=x -F key=docker-sospitos
