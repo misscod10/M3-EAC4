@@ -1,0 +1,11 @@
+[Unit]
+Description=Sistema d'alertes SOC per escalada de privilegis
+After=network.target auditd.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/soc_alertes_realtime.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
