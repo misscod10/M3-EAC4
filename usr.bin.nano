@@ -1,0 +1,25 @@
+#include <tunables/global>
+
+profile usr.bin.nano flags=(attach_disconnected) {
+  # Permetre accés als fitxers habituals
+  /var/www/html/index.html rw,
+  /etc/nanorc r,
+  /usr/share/nano/** r,
+
+  # Llibreries i entorn necessari
+  /lib/** r,
+  /lib64/** r,
+  /usr/lib/** r,
+  /usr/lib64/** r,
+
+  # Executar només el binari de nano
+  /usr/bin/nano ix,
+
+  # ❌ Denegar execució de qualsevol altre binari
+  deny /** x,
+
+  # Terminal
+  /dev/tty rw,
+
+  # Final
+}
