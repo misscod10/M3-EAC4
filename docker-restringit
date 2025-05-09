@@ -1,0 +1,33 @@
+#include <tunables/global>
+
+/usr/bin/docker {
+  profile docker-restringit flags=(attach_disconnected,mediate_deleted) {
+
+    # Permetre operacions bàsiques
+    capability,
+    file,
+    network,
+    mount,
+    umount,
+
+    # ❌ Denegar chroot (evita l’atac de canvi d’arrel)
+    deny capability sys_chroot,
+
+    # ❌ Denegar accés complet a /mnt
+    deny /mnt/** rwklx,
+
+    # ❌ Denegar accés a tot l'arbre del host si es munta
+    deny /bin/** rwklx,
+    deny /lib/** rwklx,
+    deny /lib64/** rwklx,
+    deny /usr/** rwklx,
+
+    # Permetre zones segures (com el sistema base del contenidor)
+    /etc/** r,
+    /tmp/** rw,
+    /var/tmp/** rw,
+    /dev/** rw,
+
+    # Final del perfil
+  }
+}
